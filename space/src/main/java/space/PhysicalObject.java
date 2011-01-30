@@ -92,7 +92,7 @@ public class PhysicalObject {
 	}
 
 	public void paintPhysicalObject(Graphics2D graphics, PhysicalObject po) {
-		if(!Space.IS_BREAKOUT) {
+		if(!Space.IS_BOUNCING_BALLS) {
 			graphics.setColor(Space.weightToColor(po.mass));
 			graphics.fillOval(
 					(int) ((po.x - Space.centrex) / Space.scale + Space.frame.getSize().width / 2),

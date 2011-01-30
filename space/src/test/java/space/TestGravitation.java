@@ -17,7 +17,7 @@ public class TestGravitation {
 		int earthsRadius = 6371000;
 		PhysicalObject earth = Space.add(earthsWeight, 0, -earthsRadius, 0, 0, 1);
 		PhysicalObject lump = Space.add(1, 0, 10, 0, 0, 1);
-		Space.IS_BREAKOUT=false;
+		Space.IS_BOUNCING_BALLS=false;
 		s.step();
 		assertEquals(10-9.82/2, lump.y, 0.02);
 		assertEquals(-9.82, lump.vy, 0.02);

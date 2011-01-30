@@ -22,7 +22,9 @@ public class Space extends JFrame implements MouseWheelListener,
 		MouseMotionListener, KeyListener {
 	private static final double EARTH_WEIGHT = 5.9736e24;
 	private static final double ASTRONOMICAL_UNIT = 149597870.7e3;
-	static boolean IS_BREAKOUT = true;
+	static boolean IS_BOUNCING_BALLS = true;
+	static boolean IS_BREAKOUT = false;
+	
 
 	private static final long serialVersionUID = 1532817796535372081L;
 
@@ -81,7 +83,7 @@ public class Space extends JFrame implements MouseWheelListener,
 		space.addKeyListener(space);
 		space.setSize(800, 820);
 
-		if(!IS_BREAKOUT) {
+		if(!IS_BOUNCING_BALLS) {
 			space.setStepSize(3600*24*7);
 	
 			double outerLimit = ASTRONOMICAL_UNIT*30;
@@ -144,7 +146,7 @@ public class Space extends JFrame implements MouseWheelListener,
 	}
 
 	public void step() {
-		if(!IS_BREAKOUT) {
+		if(!IS_BOUNCING_BALLS) {
 			for (PhysicalObject aff : objects) {
 				double fx = 0;
 				double fy = 0;
@@ -185,7 +187,7 @@ public class Space extends JFrame implements MouseWheelListener,
 			for (PhysicalObject other : objects) {
 				if (one == other || remove.contains(other))
 					continue;
-				if(!IS_BREAKOUT) {
+				if(!IS_BOUNCING_BALLS) {
 					if (Math.sqrt(Math.pow(one.x - other.x,2) + Math.pow(one.y - other.y,2)) < 1e9) {
 						one.absorb(other);
 						remove.add(other);
@@ -199,7 +201,7 @@ public class Space extends JFrame implements MouseWheelListener,
 				}
 			}
 			// Wall collision reverses speed in that direction
-			if(IS_BREAKOUT) {
+			if(IS_BOUNCING_BALLS) {
 				if(one.x-one.radius<0 ) {
 					one.vx = -one.vx;
 				}
@@ -209,8 +211,10 @@ public class Space extends JFrame implements MouseWheelListener,
 				if(one.y-one.radius<0 ) {
 					one.vy = -one.vy;
 				}
-				if(one.y+one.radius>800 ) {
+				if(one.y+one.radius>800 && !IS_BREAKOUT) {
 					one.vy = -one.vy;
+				} else if(one.y-one.radius > 800) {
+					remove.add(one);
 				}
 			}
 		}
@@ -219,7 +223,7 @@ public class Space extends JFrame implements MouseWheelListener,
 
 	@Override
 	public void mouseWheelMoved(final MouseWheelEvent e) {
-		if(!IS_BREAKOUT) {
+		if(!IS_BOUNCING_BALLS) {
 			scale = scale + scale * (Math.min(9, e.getWheelRotation())) / 10 + 0.0001;
 			getGraphics().clearRect(0, 0, getWidth(), getHeight());
 		}
@@ -229,7 +233,7 @@ public class Space extends JFrame implements MouseWheelListener,
 
 	@Override
 	public void mouseDragged(final MouseEvent e) {
-		if(!IS_BREAKOUT) {
+		if(!IS_BOUNCING_BALLS) {
 			if (lastDrag == null) {
 				lastDrag = e.getPoint();
 			}
