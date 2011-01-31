@@ -36,28 +36,32 @@ public class PhysicalObject {
 
 	public void hitBy(PhysicalObject other) {
 		// find collision point by backstepping
-		final double step = -Space.seconds/10;
-		double backstep = 0;
-		double[] new12 = {x-other.x,y-other.y};
+		
+		//step
+		final double s = -Space.seconds/10; 
+		//total backstep size to be found incrementally
+		double dt = 0; 
+		//vector from this object to the other object
+		double[] new12 = {x-other.x,y-other.y}; 
 		double newDistance = sqrt(new12[0]*new12[0] + new12[1]*new12[1]);
 		while(newDistance<radius + other.radius) {
-			backstep += step;
-			new12[0] = new12[0] + step*(vx-other.vx);
-			new12[1] = new12[1] + step*(vy-other.vy);
+			dt += s;
+			new12[0] = new12[0] + s*(vx-other.vx);
+			new12[1] = new12[1] + s*(vy-other.vy);
 			newDistance = sqrt(new12[0]*new12[0] + new12[1]*new12[1]);
 		}
 		
 		double m1 = other.mass;
 		double vx1 = other.vx;
 		double vy1 = other.vy;
-		double x1 = other.x + backstep*vx1;
-		double y1 = other.y + backstep*vy1;
+		double x1 = other.x + dt*vx1; 
+		double y1 = other.y + dt*vy1;
 
 		double m2 = mass;
 		double vx2 = vx;
 		double vy2 = vy;
-		double x2 = x + backstep*vx2;
-		double y2 = y + backstep*vy2;
+		double x2 = x + dt*vx2;
+		double y2 = y + dt*vy2;
 
 		double[] p12 = { x2 - x1, y2 - y1 }; // direction of impact
 		double p12_abs = sqrt(p12[0] * p12[0] + p12[1] * p12[1]);
@@ -77,11 +81,11 @@ public class PhysicalObject {
 		other.vy = v1prim[1];
 		
 		// step forward
-		x = x + v2prim[0]*(-backstep);
-		y = y + v2prim[1]*(-backstep);
+		x = x + v2prim[0]*(-dt);
+		y = y + v2prim[1]*(-dt);
 
-		other.x = other.x + v1prim[0]*(-backstep);
-		other.y = other.y + v1prim[1]*(-backstep);
+		other.x = other.x + v1prim[0]*(-dt);
+		other.y = other.y + v1prim[1]*(-dt);
 
 	}
 

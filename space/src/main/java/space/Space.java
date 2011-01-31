@@ -114,7 +114,7 @@ public class Space extends JFrame implements MouseWheelListener,
 			}
 			scale = 1;
 			centrex = 400;
-			centrey = 390;
+			centrey = 390; //Must compensate for title bar
 		}
 		space.setVisible(true);
 		while (true) {
