@@ -22,8 +22,8 @@ public class Space extends JFrame implements MouseWheelListener,
 		MouseMotionListener, KeyListener {
 	private static final double EARTH_WEIGHT = 5.9736e24;
 	private static final double ASTRONOMICAL_UNIT = 149597870.7e3;
-	static boolean IS_BOUNCING_BALLS = true;
-	static boolean IS_BREAKOUT = false;
+	static boolean IS_BOUNCING_BALLS = false;
+	static boolean IS_BREAKOUT = false; // Opens bottom, only active if IS_BOUNCING_BALLS is true
 	
 
 	private static final long serialVersionUID = 1532817796535372081L;
@@ -36,6 +36,8 @@ public class Space extends JFrame implements MouseWheelListener,
 	static double scale = 10;
 	private static boolean showWake = true;
 	private static int step = 0;
+	private static int nrOfObjects = 100;
+	private static int frameRate = 2500/nrOfObjects;
 
 	static JFrame frame;
 
@@ -88,7 +90,7 @@ public class Space extends JFrame implements MouseWheelListener,
 	
 			double outerLimit = ASTRONOMICAL_UNIT*30;
 			
-			for (int i = 0; i < 500; i++) {
+			for (int i = 0; i < nrOfObjects; i++) {
 				double angle = randSquare() * 2 * Math.PI;
 				double radius = (0.01 + 0.99*Math.sqrt(randSquare()))*outerLimit;
 				double weightKilos = 1e3*EARTH_WEIGHT*(Math.pow(0.2+0.8*randSquare(), 12));
@@ -106,7 +108,7 @@ public class Space extends JFrame implements MouseWheelListener,
 			add(EARTH_WEIGHT*332900, 0, 0, 0, 0, 1);
 		} else {
 			space.setStepSize(1); // One second per iteration/frame
-			for(int i = 0; i < 50; i++ ) {
+			for(int i = 0; i < nrOfObjects; i++ ) {
 				// radius,weight Û [1,20]
 				double radiusAndWeight = 1+19*Math.random(); 
 				//x,y Û [max radius, width or height - max radius]
@@ -121,8 +123,16 @@ public class Space extends JFrame implements MouseWheelListener,
 			EventQueue.invokeAndWait(new Runnable() {
 				@Override
 				public void run() {
+					long start = System.currentTimeMillis();
 					space.collide();
 					space.step();
+					try {
+						long sleep = 1000/frameRate - (System.currentTimeMillis() - start);
+						if(sleep>0) Thread.sleep(sleep);
+						else System.out.println("Underslept " + sleep);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
 			});
 		}
@@ -188,7 +198,7 @@ public class Space extends JFrame implements MouseWheelListener,
 				if (one == other || remove.contains(other))
 					continue;
 				if(!IS_BOUNCING_BALLS) {
-					if (Math.sqrt(Math.pow(one.x - other.x,2) + Math.pow(one.y - other.y,2)) < 1e9) {
+					if (Math.sqrt(Math.pow(one.x - other.x,2) + Math.pow(one.y - other.y,2)) < 5e9) {
 						one.absorb(other);
 						remove.add(other);
 					}

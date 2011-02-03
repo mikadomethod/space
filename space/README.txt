@@ -1,0 +1,1 @@
+Credits: The solar system example is inspired by a Clojure session by Robert C Martin at Agile2010.
