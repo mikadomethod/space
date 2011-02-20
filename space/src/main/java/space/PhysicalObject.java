@@ -106,23 +106,23 @@ public class PhysicalObject {
 				+ mass + ",radius=" + radius;
 	}
 
-	public void paintPhysicalObject(Graphics2D graphics, PhysicalObject po) {
+	public void paintPhysicalObject(Graphics2D graphics) {
 		if(!Space.IS_BOUNCING_BALLS) {
-			graphics.setColor(Space.weightToColor(po.mass));
+			graphics.setColor(Space.weightToColor(mass));
 			graphics.fillOval(
-					(int) ((po.x - Space.centrex) / Space.scale + Space.frame.getSize().width / 2),
-					(int) ((po.y - Space.centrey) / Space.scale + Space.frame.getSize().height / 2),
-					po.mass>=1e29?7:2,
-					po.mass>=1e29?7:2);
+					(int) ((x - Space.centrex) / Space.scale + Space.frame.getSize().width / 2),
+					(int) ((y - Space.centrey) / Space.scale + Space.frame.getSize().height / 2),
+					mass>=1e29?7:2,
+					mass>=1e29?7:2);
 		} else { //BREAKOUT
 			graphics.setColor(Color.WHITE);
-			int x = (int) ((po.x - Space.centrex) / Space.scale + Space.frame.getSize().width / 2);
-			int y = (int) ((po.y - Space.centrey) / Space.scale + Space.frame.getSize().height / 2);
+			int xtmp = (int) ((x - Space.centrex) / Space.scale + Space.frame.getSize().width / 2);
+			int ytmp = (int) ((y - Space.centrey) / Space.scale + Space.frame.getSize().height / 2);
 			graphics.fillOval(
-					(int)(x-po.radius),
-					(int)(y-po.radius),
-					(int)(po.radius*2/Space.scale),
-					(int)(po.radius*2/Space.scale));
+					(int)(xtmp-radius),
+					(int)(ytmp-radius),
+					(int)(radius*2/Space.scale),
+					(int)(radius*2/Space.scale));
 		}
 	}
 }
