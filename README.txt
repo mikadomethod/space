@@ -18,7 +18,9 @@ Background: The PhysicalObject is to be used in another project. However, the en
 Goal: Enable reuse of PhysicalObject
 
 -- Intermediate level
-TBD
+Background: The solar system and bouncing balls applications are to be sold in separate delivery packages. In addition, they ar
+Goal: Two separate, minimal, deliverables for bouncing balls and solar system.
+
 
 -- Difficult level
 TBD
