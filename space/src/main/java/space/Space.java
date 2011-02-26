@@ -109,9 +109,9 @@ public class Space extends JFrame implements MouseWheelListener,
 		} else {
 			space.setStepSize(1); // One second per iteration
 			for(int i = 0; i < nrOfObjects; i++ ) {
-				// radius,weight Û [1,20]
+				// radius,weight in [1,20]
 				double radiusAndWeight = 1+19*Math.random(); 
-				//x,y Û [max radius, width or height - max radius]
+				//x,y in [max radius, width or height - max radius]
 				Space.add(radiusAndWeight, 20+760*Math.random(), 20+760*Math.random(), 3-6*Math.random(), 3-6*Math.random(), radiusAndWeight);
 			}
 			scale = 1;
@@ -121,7 +121,7 @@ public class Space extends JFrame implements MouseWheelListener,
 		space.setVisible(true);
 		while (true) {
 			EventQueue.invokeAndWait(new Runnable() {
-				@Override
+
 				public void run() {
 					long start = System.currentTimeMillis();
 					space.collide();
@@ -231,7 +231,7 @@ public class Space extends JFrame implements MouseWheelListener,
 		objects.removeAll(remove);
 	}
 
-	@Override
+
 	public void mouseWheelMoved(final MouseWheelEvent e) {
 		if(!IS_BOUNCING_BALLS) {
 			scale = scale + scale * (Math.min(9, e.getWheelRotation())) / 10 + 0.0001;
@@ -241,7 +241,7 @@ public class Space extends JFrame implements MouseWheelListener,
 
 	private static Point lastDrag = null;
 
-	@Override
+
 	public void mouseDragged(final MouseEvent e) {
 		if(!IS_BOUNCING_BALLS) {
 			if (lastDrag == null) {
@@ -254,20 +254,20 @@ public class Space extends JFrame implements MouseWheelListener,
 		}
 	}
 
-	@Override
+
 	public void mouseMoved(MouseEvent e) {
 		lastDrag = null;
 	}
 
-	@Override
+
 	public void keyPressed(KeyEvent e) {
 	}
 
-	@Override
+
 	public void keyReleased(KeyEvent e) {
 	}
 
-	@Override
+
 	public void keyTyped(KeyEvent e) {
 		if (e.getKeyChar() == 'w')
 			showWake = !showWake;
