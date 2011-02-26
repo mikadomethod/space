@@ -8,3 +8,6 @@ build.gradle
 bin
 .DS_Store
 .metadata
+.idea
+*.eml
+*.iml
