@@ -13,3 +13,4 @@ bin
 *.ipr
 *.iws
 .idea/
+out
