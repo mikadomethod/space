@@ -19,9 +19,9 @@ import java.util.List;
 
 public class Space extends JFrame implements MouseWheelListener,
         MouseMotionListener, KeyListener {
-    private static final double EARTH_WEIGHT = 5.9736e24;
+    public static final double EARTH_WEIGHT = 5.9736e24;
     private static final double ASTRONOMICAL_UNIT = 149597870.7e3;
-    static boolean IS_BOUNCING_BALLS = true;
+    static boolean IS_BOUNCING_BALLS = false;
     static boolean IS_BREAKOUT = false; // Opens bottom, only active if IS_BOUNCING_BALLS is true
 
 
@@ -35,8 +35,8 @@ public class Space extends JFrame implements MouseWheelListener,
     static double scale = 10;
     private static boolean showWake = false;
     private static int step = 0;
-    private static int nrOfObjects = 50;
-    private static int frameRate = 1000 / nrOfObjects;
+    private static int nrOfObjects = 150;
+    private static int frameRate = 25;
 
     static JFrame frame;
 
@@ -56,7 +56,7 @@ public class Space extends JFrame implements MouseWheelListener,
             }
             for (PhysicalObject po : objects) {
                 po.paintPhysicalObject(graphics);
-                String string = "Objects:" + objects.size() + " scale:" + scale + " steps:" + step;
+                String string = "Objects:" + objects.size() + " scale:" + scale + " steps:" + step + " frame rate: " + frameRate;
                 setTitle(string);
             }
             original.drawImage(buffer, 0, 0, getWidth(), getHeight(), null);
@@ -87,15 +87,15 @@ public class Space extends JFrame implements MouseWheelListener,
         if (!IS_BOUNCING_BALLS) {
             space.setStepSize(3600 * 24 * 7);
 
-            double outerLimit = ASTRONOMICAL_UNIT * 30;
+            double outerLimit = ASTRONOMICAL_UNIT * 20;
 
             for (int i = 0; i < nrOfObjects; i++) {
                 double angle = randSquare() * 2 * Math.PI;
-                double radius = (0.01 + 0.99 * Math.sqrt(randSquare())) * outerLimit;
-                double weightKilos = 1e3 * EARTH_WEIGHT * (Math.pow(0.2 + 0.8 * randSquare(), 12));
+                double radius = (0.1 + 0.9 * Math.sqrt(randSquare())) * outerLimit;
+                double weightKilos = 1e3 * EARTH_WEIGHT * (Math.pow(0.00001 + 0.99999 * randSquare(), 12));
                 double x = radius * Math.sin(angle);
                 double y = radius * Math.cos(angle);
-                double speedRandom = Math.sqrt(1 / radius) * 2978000 * 5000 * (0.2 + 0.8 * randSquare());
+                double speedRandom = Math.sqrt(1 / radius) * 2978000*1500 * (0.4 + 0.6 * randSquare());
 
                 double vx = speedRandom * Math.sin(angle - Math.PI / 2);
                 double vy = speedRandom * Math.cos(angle - Math.PI / 2);
@@ -104,8 +104,9 @@ public class Space extends JFrame implements MouseWheelListener,
 
             scale = outerLimit / space.getWidth();
 
-            add(EARTH_WEIGHT * 332900, 0, 0, 0, 0, 1);
+            add(EARTH_WEIGHT * 20000, 0, 0, 0, 0, 1);
         } else {
+            nrOfObjects = 50;
             space.setStepSize(1); // One second per iteration
             for (int i = 0; i < nrOfObjects; i++) {
                 // radius,weight in [1,20]
@@ -127,8 +128,12 @@ public class Space extends JFrame implements MouseWheelListener,
                     space.step();
                     try {
                         long sleep = 1000 / frameRate - (System.currentTimeMillis() - start);
-                        if (sleep > 0) Thread.sleep(sleep);
-                        else System.out.println("Underslept " + sleep);
+                        if (sleep > 0) {
+                            Thread.sleep(sleep);
+                            if(frameRate<25) frameRate++;
+                        } else {
+                            frameRate--;
+                        }
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
