@@ -51,9 +51,3 @@ separating presentation logic from domain ASAP.
 ##### Goal
 The domain logic is compilable without Swing/AWT dependencies. When Swing/AWT +
 any bridging code is available, the application should be runnable.
-
-
-
-Very difficult level
---------------------
-TBD
