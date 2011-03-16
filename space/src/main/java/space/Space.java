@@ -35,7 +35,7 @@ public class Space extends JFrame implements MouseWheelListener,
     static double scale = 10;
     private static boolean showWake = false;
     private static int step = 0;
-    private static int nrOfObjects = 150;
+    private static int nrOfObjects = 75;
     private static int frameRate = 25;
 
     static JFrame frame;
@@ -128,11 +128,12 @@ public class Space extends JFrame implements MouseWheelListener,
                 }
             });
             try {
-                long sleep = 1000 / frameRate - (System.currentTimeMillis() - start);
-                if (sleep > 0) {
-                    Thread.sleep(sleep);
+                long ahead = 1000 / frameRate - (System.currentTimeMillis() - start);
+                if (ahead > 50) {
+                    Thread.sleep(ahead);
                     if(frameRate<25) frameRate++;
                 } else {
+                    Thread.sleep(50);
                     frameRate--;
                 }
             } catch (InterruptedException e) {
