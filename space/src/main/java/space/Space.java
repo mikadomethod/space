@@ -120,25 +120,24 @@ public class Space extends JFrame implements MouseWheelListener,
         }
         space.setVisible(true);
         while (true) {
+            final long start = System.currentTimeMillis();
             EventQueue.invokeAndWait(new Runnable() {
-
                 public void run() {
-                    long start = System.currentTimeMillis();
                     space.collide();
                     space.step();
-                    try {
-                        long sleep = 1000 / frameRate - (System.currentTimeMillis() - start);
-                        if (sleep > 0) {
-                            Thread.sleep(sleep);
-                            if(frameRate<25) frameRate++;
-                        } else {
-                            frameRate--;
-                        }
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                 }
             });
+            try {
+                long sleep = 1000 / frameRate - (System.currentTimeMillis() - start);
+                if (sleep > 0) {
+                    Thread.sleep(sleep);
+                    if(frameRate<25) frameRate++;
+                } else {
+                    frameRate--;
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
